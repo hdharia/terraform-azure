@@ -26,6 +26,18 @@ resource "azurerm_subnet" "test" {
   address_prefix       = "10.0.2.0/24"
 }
 
+resource "azurerm_public_ip" "test" {
+  name = "acctpubip"
+  location = "usgovvirginia"
+  resource_group_name = "${azurerm_resource_group.test.name}"
+  public_ip_address_allocation = "dynamic"
+
+  tags
+  {
+    environment = "staging"
+  }
+}
+
 resource "azurerm_network_interface" "test" {
   name                = "acctni"
   location            = "usgovvirginia"
@@ -35,6 +47,7 @@ resource "azurerm_network_interface" "test" {
     name                          = "testconfiguration1"
     subnet_id                     = "${azurerm_subnet.test.id}"
     private_ip_address_allocation = "dynamic"
+    public_ip_address_id = "${azurerm_public_ip.test.id}"
   }
 }
 
@@ -53,6 +66,12 @@ resource "azurerm_virtual_machine" "test" {
   resource_group_name   = "${azurerm_resource_group.test.name}"
   network_interface_ids = ["${azurerm_network_interface.test.id}"]
   vm_size               = "Standard_DS1_v2"
+  
+  boot_diagnostics {
+    enabled = "true"
+    storage_uri = "https://linuxvm.blob.core.usgovcloudapi.net"
+  } 
+
 
   # Uncomment this line to delete the OS disk automatically when deleting the VM
   # delete_os_disk_on_termination = true
@@ -107,7 +126,7 @@ resource "azurerm_virtual_machine" "test" {
 }
 
 resource "azurerm_virtual_machine_extension" "test" {
-  name                 = "hostname"
+  name                 = "docker install"
   location             = "usgovvirginia"
   resource_group_name  = "${azurerm_resource_group.test.name}"
   virtual_machine_name = "${azurerm_virtual_machine.test.name}"
@@ -117,14 +136,9 @@ resource "azurerm_virtual_machine_extension" "test" {
 
   settings = <<SETTINGS
   {
-    "fileUris": [""]
+    "fileUris": ["https://raw.githubusercontent.com/hdharia/terraform-azure/master/script/install-docker.sh"],
+    "commandToExecute": "./install-docker.sh"
   }
-SETTINGS
-
-  settings = <<SETTINGS
-    {
-        "commandToExecute": "hostname"
-    }
 SETTINGS
 
   tags {
