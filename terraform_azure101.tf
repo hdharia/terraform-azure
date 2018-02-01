@@ -126,7 +126,7 @@ resource "azurerm_virtual_machine" "test" {
 }
 
 resource "azurerm_virtual_machine_extension" "test" {
-  name                 = "docker install"
+  name                 = "docker_install"
   location             = "usgovvirginia"
   resource_group_name  = "${azurerm_resource_group.test.name}"
   virtual_machine_name = "${azurerm_virtual_machine.test.name}"
