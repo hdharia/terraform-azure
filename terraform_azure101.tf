@@ -130,18 +130,19 @@ resource "azurerm_virtual_machine_extension" "test" {
   location             = "usgovvirginia"
   resource_group_name  = "${azurerm_resource_group.test.name}"
   virtual_machine_name = "${azurerm_virtual_machine.test.name}"
-  publisher            = "Microsoft.OSTCExtensions"
-  type                 = "CustomScriptForLinux"
-  type_handler_version = "1.2"
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.0"
+  auto_upgrade_minor_version = "true"
 
   settings = <<SETTINGS
   {
     "fileUris": ["https://raw.githubusercontent.com/hdharia/terraform-azure/master/script/install-docker.sh"],
-    "commandToExecute": "sh"
+    "commandToExecute": "sh install-docker.sh"
   }
 SETTINGS
 
   tags {
-    environment = "Production"
+    environment = "staging"
   }
 }
