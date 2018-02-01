@@ -8,38 +8,38 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "test" {
-  name     = "acctestrg"
+  name     = "docker_dev"
   location = "usgovvirginia"
 }
 
 resource "azurerm_virtual_network" "test" {
-  name                = "acctvn"
+  name                = "docker_dev_vn"
   address_space       = ["10.0.0.0/16"]
   location            = "usgovvirginia"
   resource_group_name = "${azurerm_resource_group.test.name}"
 }
 
 resource "azurerm_subnet" "test" {
-  name                 = "acctsub"
+  name                 = "docker_dev_sub"
   resource_group_name  = "${azurerm_resource_group.test.name}"
   virtual_network_name = "${azurerm_virtual_network.test.name}"
   address_prefix       = "10.0.2.0/24"
 }
 
 resource "azurerm_public_ip" "test" {
-  name = "acctpubip"
+  name = "docker_dev_ip"
   location = "usgovvirginia"
   resource_group_name = "${azurerm_resource_group.test.name}"
   public_ip_address_allocation = "dynamic"
 
   tags
   {
-    environment = "staging"
+    environment = "dev"
   }
 }
 
 resource "azurerm_network_interface" "test" {
-  name                = "acctni"
+  name                = "docker_devni"
   location            = "usgovvirginia"
   resource_group_name = "${azurerm_resource_group.test.name}"
 
@@ -61,7 +61,7 @@ resource "azurerm_managed_disk" "test" {
 }
 
 resource "azurerm_virtual_machine" "test" {
-  name                  = "acctvm"
+  name                  = "docker_devvm"
   location              = "usgovvirginia"
   resource_group_name   = "${azurerm_resource_group.test.name}"
   network_interface_ids = ["${azurerm_network_interface.test.id}"]
@@ -121,7 +121,7 @@ resource "azurerm_virtual_machine" "test" {
   }
 
   tags {
-    environment = "staging"
+    environment = "dev"
   }
 }
 
@@ -143,6 +143,6 @@ resource "azurerm_virtual_machine_extension" "test" {
 SETTINGS
 
   tags {
-    environment = "staging"
+    environment = "dev"
   }
 }
