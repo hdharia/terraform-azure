@@ -137,7 +137,7 @@ resource "azurerm_virtual_machine_extension" "test" {
   settings = <<SETTINGS
   {
     "fileUris": ["https://raw.githubusercontent.com/hdharia/terraform-azure/master/script/install-docker.sh"],
-    "commandToExecute": "./install-docker.sh"
+    "commandToExecute": "sh"
   }
 SETTINGS
 
