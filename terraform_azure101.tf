@@ -31,6 +31,7 @@ resource "azurerm_public_ip" "test" {
   location = "usgovvirginia"
   resource_group_name = "${azurerm_resource_group.test.name}"
   public_ip_address_allocation = "dynamic"
+  domain_name_label = "dockerdevhd"
 
   tags
   {
@@ -111,13 +112,20 @@ resource "azurerm_virtual_machine" "test" {
   }
 
   os_profile {
-    computer_name  = "hostname"
-    admin_username = "testadmin"
-    admin_password = "Password1234!"
+    computer_name  = "${var.computer_name}"
+    admin_username = "${var.admin_username}"
   }
 
   os_profile_linux_config {
-    disable_password_authentication = false
+    disable_password_authentication = true
+    ssh_keys = [{
+      path = "/home/${var.admin_username}/.ssh/authorized_keys"
+      key_data = "${var.key_data}"
+    },
+    {
+      path = "/home/${var.admin_username}/.ssh/authorized_keys"
+      key_data = "${var.key_data_jenkins}"
+    }]
   }
 
   tags {
@@ -145,4 +153,10 @@ SETTINGS
   tags {
     environment = "dev"
   }
+}
+
+data "azurerm_public_ip" "test" {
+  name                = "${azurerm_public_ip.test.name}"
+  resource_group_name = "${azurerm_resource_group.test.name}"
+  depends_on          = ["azurerm_virtual_machine.test"]
 }

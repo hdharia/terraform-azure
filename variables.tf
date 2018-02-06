@@ -3,3 +3,7 @@
  variable "client_secret" {}
  variable "tenant_id" {}
  variable "environment" {}
+ variable "key_data" {}
+ variable "key_data_jenkins" {}
+ variable "computer_name" {}
+ variable "admin_username" {}
