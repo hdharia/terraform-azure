@@ -8,4 +8,4 @@ sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/u
 sudo apt-get -y update
 sudo apt-get -y install docker-ce
 sudo groupadd docker
-sudo usermod -aG docker $USER
+sudo usermod -aG docker hadharia
