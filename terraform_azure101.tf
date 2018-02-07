@@ -145,10 +145,16 @@ resource "azurerm_virtual_machine_extension" "test" {
 
   settings = <<SETTINGS
   {
-    "fileUris": ["https://raw.githubusercontent.com/hdharia/terraform-azure/master/script/install-docker.sh"],
-    "commandToExecute": "sh install-docker.sh"
+    "fileUris": ["https://raw.githubusercontent.com/hdharia/terraform-azure/master/script/install-docker.sh"]
   }
 SETTINGS
+
+  protected_settings = <<PROTECTED_SETTINGS
+  {
+    "commandToExecute": "sh install-docker.sh && sudo docker login techsummithd.azurecr.io -u ${var.user_id_acr} -p ${var.password_acr}"
+  }
+PROTECTED_SETTINGS
+
 
   tags {
     environment = "dev"

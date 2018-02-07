@@ -7,3 +7,5 @@
  variable "key_data_jenkins" {}
  variable "computer_name" {}
  variable "admin_username" {}
+ variable "user_id_acr" {}
+ variable "password_acr" {}
