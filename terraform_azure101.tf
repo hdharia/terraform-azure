@@ -151,7 +151,7 @@ SETTINGS
 
   protected_settings = <<PROTECTED_SETTINGS
   {
-    "commandToExecute": "sh install-docker.sh && sudo docker login techsummithd.azurecr.io -u ${var.user_id_acr} -p ${var.password_acr}"
+    "commandToExecute": "curl -fsSL get.docker.com -o get-docker.sh && sh get-docker.sh"
   }
 PROTECTED_SETTINGS
 
